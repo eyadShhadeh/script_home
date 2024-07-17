@@ -2,10 +2,11 @@ import logging
 import csv
 import os
 from uuid import uuid4, UUID
-from sqlalchemy import Table, Column, SmallInteger, String, MetaData, insert
+from sqlalchemy import Table, Column, SmallInteger, String, MetaData, insert, DateTime
 import sqlalchemy as sa
 from pydantic import BaseModel
 from typing import Generator, Tuple
+from datetime import datetime
 
 CHUNK_SIZE = int(os.getenv('chunk_size', '10000'))
 
@@ -35,6 +36,9 @@ users = Table(
     Column("last_name", String(50), nullable=False),
     Column("address", String(50)),
     Column("age", SmallInteger, nullable=False),
+    Column('created_at', DateTime, default=datetime.utcnow),
+    Column('updated_at', DateTime),
+
 )
 
 

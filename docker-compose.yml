@@ -1,0 +1,50 @@
+services:
+  si-tech-db:
+    image: postgres
+    container_name: si-tech-db
+    environment:
+      - PGUSER=postgres
+      - PGPASSWORD=password
+      - PGHOST=si-tech-db
+      - PGPORT=5432
+      - PGDATABASE=postgres
+      - PYTHONDONTWRITEBYTECODE=true
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - "5432:5432"
+    networks:
+      - eyad_default
+
+  si-tech-base:
+    volumes:
+      - ${PWD}:/app
+    build:
+      context: .
+    container_name: si-tech-base
+    ports:
+      - "8000"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - ENVIRONMENT=dev
+
+  si-tech-service:
+    extends:
+      service: si-tech-base
+    container_name: si-tech-service
+    ports:
+      - "8000:8000"
+
+
+  si-tech-alembic:
+    extends:
+      service: si-tech-base
+    depends_on:
+      - si-tech-db
+    container_name: si-tech-alembic
+    command: [ "alembic", "upgrade", "head" ]
+networks:
+  eyad_default:
+    name: eyad_default

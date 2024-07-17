@@ -1,0 +1,13 @@
+alembic
+anyio
+fastapi
+greenlet
+idna
+Mako
+MarkupSafe
+psycopg2-binary
+pydantic
+SQLAlchemy
+gunicorn
+requests
+loguru
